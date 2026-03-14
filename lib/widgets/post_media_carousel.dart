@@ -65,26 +65,35 @@ class _PostMediaCarouselState extends State<PostMediaCarousel> {
   }
 
   Widget _buildImage(String url) {
-    final imageProvider = CachedNetworkImageProvider(url);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+        final cacheSize = (constraints.maxWidth * devicePixelRatio).round();
+        final cacheDimension = cacheSize > 0 ? cacheSize : null;
+        final imageProvider = CachedNetworkImageProvider(url);
 
-    return PinchToZoom(
-      overlayBuilder: (context) => Image(
-        image: imageProvider,
-        fit: BoxFit.cover,
-        filterQuality: FilterQuality.high,
-      ),
-      child: CachedNetworkImage(
-        imageUrl: url,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => Container(
-          color: Colors.grey.shade200,
-        ),
-        errorWidget: (context, url, error) => Container(
-          color: Colors.grey.shade200,
-          alignment: Alignment.center,
-          child: const Icon(Icons.broken_image_outlined),
-        ),
-      ),
+        return PinchToZoom(
+          overlayBuilder: (context) => Image(
+            image: imageProvider,
+            fit: BoxFit.cover,
+            filterQuality: FilterQuality.high,
+          ),
+          child: CachedNetworkImage(
+            imageUrl: url,
+            fit: BoxFit.cover,
+            memCacheWidth: cacheDimension,
+            memCacheHeight: cacheDimension,
+            placeholder: (context, url) => Container(
+              color: Colors.grey.shade200,
+            ),
+            errorWidget: (context, url, error) => Container(
+              color: Colors.grey.shade200,
+              alignment: Alignment.center,
+              child: const Icon(Icons.broken_image_outlined),
+            ),
+          ),
+        );
+      },
     );
   }
 }

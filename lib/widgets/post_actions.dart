@@ -24,6 +24,9 @@ class PostActions extends StatelessWidget {
       children: [
         IconButton(
           onPressed: onLike,
+          iconSize: 24,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
           icon: Icon(
             isLiked ? Icons.favorite : Icons.favorite_border,
             color: isLiked ? const Color(0xFFED4956) : Colors.black,
@@ -31,15 +34,24 @@ class PostActions extends StatelessWidget {
         ),
         IconButton(
           onPressed: onComment,
+          iconSize: 24,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
           icon: const Icon(Icons.mode_comment_outlined),
         ),
         IconButton(
           onPressed: onShare,
+          iconSize: 24,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
           icon: const Icon(Icons.send_outlined),
         ),
         const Spacer(),
         IconButton(
           onPressed: onSave,
+          iconSize: 24,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
           icon: Icon(
             isSaved ? Icons.bookmark : Icons.bookmark_border,
           ),

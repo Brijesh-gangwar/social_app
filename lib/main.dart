@@ -15,6 +15,11 @@ class InstagramCloneApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final baseTheme = ThemeData.light();
+    final textTheme = GoogleFonts.robotoTextTheme(baseTheme.textTheme).copyWith(
+      bodyMedium: GoogleFonts.roboto(fontSize: 14, height: 1.3),
+      bodySmall: GoogleFonts.roboto(fontSize: 12, height: 1.3),
+      titleMedium: GoogleFonts.roboto(fontWeight: FontWeight.w600, fontSize: 15),
+    );
 
     return ChangeNotifierProvider(
       create: (_) => FeedController(),
@@ -22,12 +27,17 @@ class InstagramCloneApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Instagram Feed',
         theme: baseTheme.copyWith(
+          useMaterial3: false,
           scaffoldBackgroundColor: Colors.white,
-          textTheme: GoogleFonts.robotoTextTheme(baseTheme.textTheme),
+          textTheme: textTheme,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           appBarTheme: const AppBarTheme(
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
             elevation: 0.5,
+          ),
+          snackBarTheme: const SnackBarThemeData(
+            behavior: SnackBarBehavior.floating,
           ),
         ),
         home: const HomeScreen(),

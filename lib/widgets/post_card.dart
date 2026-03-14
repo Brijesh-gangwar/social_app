@@ -39,7 +39,10 @@ class PostCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   post.user.username,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               IconButton(
@@ -68,7 +71,10 @@ class PostCard extends StatelessWidget {
             children: [
               Text(
                 '${post.likeCount} likes',
-                style: const TextStyle(fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
               ),
               const SizedBox(height: 4),
               RichText(
@@ -103,7 +109,9 @@ class PostCard extends StatelessWidget {
   }
 
   void _showUnavailable(BuildContext context, String label) {
-    ScaffoldMessenger.of(context).showSnackBar(
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
       SnackBar(
         content: Text('$label coming soon'),
         duration: const Duration(seconds: 3),

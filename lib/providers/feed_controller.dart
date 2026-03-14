@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 
 import '../data/post_repository.dart';
@@ -16,6 +18,8 @@ class FeedController extends ChangeNotifier {
   bool _isLoading = true;
   bool _isLoadingMore = false;
   bool _hasMore = true;
+  String? _errorMessage;
+  String? _pagingError;
   int _page = 0;
   final int _pageSize = 10;
 
@@ -24,6 +28,9 @@ class FeedController extends ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get isLoadingMore => _isLoadingMore;
   bool get hasMore => _hasMore;
+  bool get hasError => _errorMessage != null;
+  String? get errorMessage => _errorMessage;
+  String? get pagingError => _pagingError;
 
   Future<void> loadInitial() async {
     if (!_isLoading) {
@@ -35,14 +42,20 @@ class FeedController extends ChangeNotifier {
     _hasMore = true;
     _posts.clear();
     _stories.clear();
+    _errorMessage = null;
+    _pagingError = null;
 
-    final results = await Future.wait([
-      _repository.fetchStories(),
-      _repository.fetchPage(page: _page, pageSize: _pageSize),
-    ]);
+    try {
+      final results = await Future.wait([
+        _repository.fetchStories(),
+        _repository.fetchPage(page: _page, pageSize: _pageSize),
+      ]);
 
-    _stories.addAll(results[0] as List<Story>);
-    _posts.addAll(results[1] as List<Post>);
+      _stories.addAll(results[0] as List<Story>);
+      _posts.addAll(results[1] as List<Post>);
+    } catch (_) {
+      _errorMessage = 'Unable to load the feed.';
+    }
 
     _isLoading = false;
     notifyListeners();
@@ -54,15 +67,25 @@ class FeedController extends ChangeNotifier {
     }
 
     _isLoadingMore = true;
+    _pagingError = null;
     notifyListeners();
 
-    _page += 1;
-    final nextPage = await _repository.fetchPage(page: _page, pageSize: _pageSize);
+    try {
+      final nextPageIndex = _page + 1;
+      final nextPage = await _repository.fetchPage(
+        page: nextPageIndex,
+        pageSize: _pageSize,
+      );
 
-    if (nextPage.isEmpty) {
-      _hasMore = false;
-    } else {
-      _posts.addAll(nextPage);
+      if (nextPage.isEmpty) {
+        _hasMore = false;
+      } else {
+        _page = nextPageIndex;
+        _posts.addAll(nextPage);
+        _hasMore = nextPage.length == _pageSize;
+      }
+    } catch (_) {
+      _pagingError = 'Failed to load more posts.';
     }
 
     _isLoadingMore = false;
@@ -75,10 +98,12 @@ class FeedController extends ChangeNotifier {
 
     final post = _posts[index];
     final nextLiked = !post.isLiked;
+    final delta = nextLiked ? 1 : -1;
+    final nextLikeCount = max(0, post.likeCount + delta);
 
     _posts[index] = post.copyWith(
       isLiked: nextLiked,
-      likeCount: post.likeCount + (nextLiked ? 1 : -1),
+      likeCount: nextLikeCount,
     );
     notifyListeners();
   }

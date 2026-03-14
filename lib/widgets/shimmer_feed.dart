@@ -14,7 +14,7 @@ class ShimmerFeed extends StatelessWidget {
         SizedBox(
           height: 110,
           child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) => const ShimmerStory(),
             separatorBuilder: (context, index) => const SizedBox(width: 12),
@@ -26,5 +26,14 @@ class ShimmerFeed extends StatelessWidget {
         const ShimmerPostCard(),
       ],
     );
+  }
+}
+
+class ShimmerFeedFooter extends StatelessWidget {
+  const ShimmerFeedFooter({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const ShimmerPostCard();
   }
 }
