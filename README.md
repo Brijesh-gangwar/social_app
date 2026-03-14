@@ -1,16 +1,20 @@
 # instagram_clone
 
-A new Flutter project.
+Instagram home feed UI/UX challenge implementation.
 
-## Getting Started
+## State Management
+This project uses `provider` with a `ChangeNotifier` (`FeedController`) to manage the feed state, pagination, and local interactions (like/save). The UI listens to updates and rebuilds only where needed.
 
-This project is a starting point for a Flutter application.
+## How To Run
+1. Run `flutter pub get` to install dependencies.
+2. Run `flutter run` to launch on a simulator or device.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features Covered
+- Pixel-aligned home feed layout with stories tray and post feed.
+- Carousel posts with dot indicators.
+- Pinch-to-zoom overlay that animates back on release.
+- Local toggle states for Like and Save.
+- Custom snackbars for unavailable actions.
+- Mock repository with 1.5s latency and shimmer loading states.
+- Infinite scroll pagination (loads when two posts remain).
+- Cached network images and graceful error placeholders.
